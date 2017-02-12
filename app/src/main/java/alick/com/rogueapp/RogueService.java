@@ -1,9 +1,13 @@
 package alick.com.rogueapp;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 
 /**
  * Created by cxw on 2017/2/10.
@@ -12,8 +16,7 @@ import android.support.annotation.Nullable;
 public class RogueService extends Service {
     public static final String TAG = RogueService.class.getSimpleName();
 
-    private boolean isRunning;
-    private int index;
+
 
 
     @Nullable
@@ -29,31 +32,31 @@ public class RogueService extends Service {
         BLog.i(TAG, "--->onCreate()");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         BLog.i(TAG, "--->onStartCommand()");
-        startIM();
+        IMControl.getInstance().startIM();
+
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Notification notification = new Notification.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setWhen(System.currentTimeMillis())
+                .setTicker("有通知到来")
+                .setContentTitle("这是通知的标题")
+                .setContentText("这是通知的内容")
+                .setOngoing(true)
+                .setContentIntent(pendingIntent)
+                .build();
+//                .build();
+        /*使用startForeground,如果id为0，那么notification将不会显示*/
+        startForeground(0, notification);
+
         return Service.START_STICKY;
     }
 
-    private void startIM() {
-        if (!isRunning) {
-            isRunning = true;
-            new Thread() {
-                @Override
-                public void run() {
-                    while (isRunning){
-                        BLog.i("正在运行:"+(index++));
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }.start();
-        }
-    }
+
 
 
     @Override

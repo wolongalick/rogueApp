@@ -13,5 +13,6 @@ public class MainActivity extends AppCompatActivity {
 
         T.showShort(this,"--->onCreate(),启动MainActivity");
         startService(new Intent(this,RogueService.class));
+
     }
 }
