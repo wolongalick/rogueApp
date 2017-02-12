@@ -1,4 +1,4 @@
-package alick.com.rogueapp;
+package alick.com.rogueapp.service;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -9,15 +9,17 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 
+import alick.com.rogueapp.BLog;
+import alick.com.rogueapp.IMControl;
+import alick.com.rogueapp.MainActivity;
+import alick.com.rogueapp.R;
+
 /**
  * Created by cxw on 2017/2/10.
  */
 
 public class RogueService extends Service {
     public static final String TAG = RogueService.class.getSimpleName();
-
-
-
 
     @Nullable
     @Override
@@ -55,8 +57,6 @@ public class RogueService extends Service {
 
         return Service.START_STICKY;
     }
-
-
 
 
     @Override

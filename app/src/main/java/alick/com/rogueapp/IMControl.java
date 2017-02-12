@@ -16,7 +16,7 @@ public class IMControl {
     private IMControl() {
     }
 
-    void startIM() {
+    public void startIM() {
         if (!isRunning) {
             isRunning = true;
             new Thread() {
