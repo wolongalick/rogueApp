@@ -26,8 +26,12 @@
             android:exported="true" />
         <service
             android:name=".service.RomoteService"
+            android:process=":romote"
             android:enabled="true"
             android:exported="true"/>
+
+
+        <service android:name=".service.GrayService"/>
     </application>
 
 </manifest>

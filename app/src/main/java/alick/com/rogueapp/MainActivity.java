@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         T.showShort(this,"--->onCreate(),启动MainActivity");
+//        startService(new Intent(this,GrayService.class));
 //        startService(new Intent(this,RogueService.class));
 //        startService(new Intent(this,DameonService.class));
         startService(new Intent(this,LocalService.class));

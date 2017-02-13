@@ -8,10 +8,10 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import alick.com.rogueapp.BLog;
 import alick.com.rogueapp.IMyAidlInterface;
-import alick.com.rogueapp.T;
 
 public class RomoteService extends Service {
     private static final String TAG = RomoteService.class.getSimpleName();
@@ -33,7 +33,7 @@ public class RomoteService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        T.showShort(this,"远程服务started");
+        Toast.makeText(RomoteService.this,"远程服务started",Toast.LENGTH_SHORT).show();
         BLog.i(TAG,"远程服务started");
 
         this.bindService(new Intent(this, LocalService.class), conn, Context.BIND_IMPORTANT);
@@ -56,7 +56,7 @@ public class RomoteService extends Service {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            T.showShort(RomoteService.this,"本地服务killed");
+            Toast.makeText(RomoteService.this,"本地服务killed",Toast.LENGTH_SHORT).show();
             BLog.i("本地服务killed");
             //开启本地服务
             RomoteService.this.startService(new Intent(RomoteService.this, LocalService.class));
@@ -71,6 +71,9 @@ public class RomoteService extends Service {
         super.onDestroy();
         //开启本地服务
         RomoteService.this.startService(new Intent(RomoteService.this, LocalService.class));
+
+        unbindService(conn);
+
         //绑定本地服务
         RomoteService.this.bindService(new Intent(RomoteService.this, LocalService.class), conn, Context.BIND_IMPORTANT);
 

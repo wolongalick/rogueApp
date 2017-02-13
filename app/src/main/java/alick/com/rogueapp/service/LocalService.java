@@ -8,11 +8,11 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import alick.com.rogueapp.BLog;
 import alick.com.rogueapp.IMControl;
 import alick.com.rogueapp.IMyAidlInterface;
-import alick.com.rogueapp.T;
 
 public class LocalService extends Service {
     private static final java.lang.String TAG = LocalService.class.getSimpleName();
@@ -24,6 +24,7 @@ public class LocalService extends Service {
     public IBinder onBind(Intent intent) {
         return binder;
     }
+
 
     @Override
     public void onCreate() {
@@ -41,7 +42,7 @@ public class LocalService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        T.showShort(this,"本地服务started");
+        Toast.makeText(LocalService.this,"本地服务started",Toast.LENGTH_SHORT).show();
         BLog.i(TAG,"本地服务started");
 
         this.bindService(new Intent(this, RomoteService.class), conn, Context.BIND_IMPORTANT);
@@ -58,7 +59,7 @@ public class LocalService extends Service {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            T.showShort(LocalService.this,"远程服务killed");
+            Toast.makeText(LocalService.this,"远程服务killed",Toast.LENGTH_SHORT).show();
             BLog.i("远程服务killed");
             //开启远程服务
             startService(new Intent(LocalService.this, RomoteService.class));
@@ -72,6 +73,9 @@ public class LocalService extends Service {
         super.onDestroy();
         //开启远程服务
         LocalService.this.startService(new Intent(LocalService.this, RomoteService.class));
+
+        unbindService(conn);
+
         //绑定远程服务
         LocalService.this.bindService(new Intent(LocalService.this, RomoteService.class), conn, Context.BIND_IMPORTANT);
 
