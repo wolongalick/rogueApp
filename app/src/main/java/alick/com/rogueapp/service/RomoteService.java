@@ -18,25 +18,27 @@ public class RomoteService extends Service {
     MyConn conn;
     MyBinder binder;
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return binder;
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
+        BLog.i(TAG, "--->onCreate()--->RomoteService");
         conn = new MyConn();
         binder = new MyBinder();
     }
 
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        BLog.i(TAG, "--->onBind()--->RomoteService");
+        return binder;
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(RomoteService.this,"远程服务started",Toast.LENGTH_SHORT).show();
-        BLog.i(TAG,"远程服务started");
-
-        this.bindService(new Intent(this, LocalService.class), conn, Context.BIND_IMPORTANT);
+        Toast.makeText(RomoteService.this, "远程服务started", Toast.LENGTH_SHORT).show();
+        BLog.i(TAG, "--->onStartCommand()--->RomoteService");
+        //绑定本地服务
+        bindService(new Intent(this, LocalService.class), conn, Context.BIND_IMPORTANT);
         return START_STICKY;
     }
 
@@ -51,17 +53,17 @@ public class RomoteService extends Service {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-
+            BLog.i(TAG, "--->onServiceConnected()--->RomoteService");
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Toast.makeText(RomoteService.this,"本地服务killed",Toast.LENGTH_SHORT).show();
-            BLog.i("本地服务killed");
+            Toast.makeText(RomoteService.this, "本地服务killed", Toast.LENGTH_SHORT).show();
+            BLog.i(TAG, "--->onServiceDisconnected()--->RomoteService");
             //开启本地服务
-            RomoteService.this.startService(new Intent(RomoteService.this, LocalService.class));
+            startService(new Intent(RomoteService.this, LocalService.class));
             //绑定本地服务
-            RomoteService.this.bindService(new Intent(RomoteService.this, LocalService.class), conn, Context.BIND_IMPORTANT);
+            bindService(new Intent(RomoteService.this, LocalService.class), conn, Context.BIND_IMPORTANT);
         }
 
     }
@@ -69,13 +71,14 @@ public class RomoteService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //开启本地服务
-        RomoteService.this.startService(new Intent(RomoteService.this, LocalService.class));
-
-        unbindService(conn);
+        Toast.makeText(this, "远程服务销毁", Toast.LENGTH_SHORT).show();
+        BLog.i(TAG, "--->onDestroy()--->RomoteService");
+//        unbindService(conn);
 
         //绑定本地服务
-        RomoteService.this.bindService(new Intent(RomoteService.this, LocalService.class), conn, Context.BIND_IMPORTANT);
+//        RomoteService.this.bindService(new Intent(RomoteService.this, LocalService.class), conn, Context.BIND_IMPORTANT);
 
+        //开启本地服务
+//        RomoteService.this.startService(new Intent(RomoteService.this, LocalService.class));
     }
 }
