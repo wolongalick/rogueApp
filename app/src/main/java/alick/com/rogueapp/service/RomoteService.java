@@ -72,7 +72,7 @@ public class RomoteService extends Service {
         //开启本地服务
         RomoteService.this.startService(new Intent(RomoteService.this, LocalService.class));
 
-        unbindService(conn);
+//        unbindService(conn);
 
         //绑定本地服务
         RomoteService.this.bindService(new Intent(RomoteService.this, LocalService.class), conn, Context.BIND_IMPORTANT);
