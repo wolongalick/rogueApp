@@ -18,10 +18,11 @@ public class RomoteService extends Service {
     MyConn conn;
     MyBinder binder;
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return binder;
+    class MyBinder extends IMyAidlInterface.Stub {
+        @Override
+        public String getServiceName() throws RemoteException {
+            return RomoteService.class.getSimpleName();
+        }
     }
 
     @Override
@@ -31,6 +32,12 @@ public class RomoteService extends Service {
         binder = new MyBinder();
     }
 
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return binder;
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(RomoteService.this,"远程服务started",Toast.LENGTH_SHORT).show();
@@ -38,13 +45,6 @@ public class RomoteService extends Service {
 
         this.bindService(new Intent(this, LocalService.class), conn, Context.BIND_IMPORTANT);
         return START_STICKY;
-    }
-
-    class MyBinder extends IMyAidlInterface.Stub {
-        @Override
-        public String getServiceName() throws RemoteException {
-            return RomoteService.class.getSimpleName();
-        }
     }
 
     class MyConn implements ServiceConnection {

@@ -19,12 +19,12 @@ public class LocalService extends Service {
     MyBinder binder;
     MyConn conn;
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return binder;
+    class MyBinder extends IMyAidlInterface.Stub {
+        @Override
+        public String getServiceName() throws RemoteException {
+            return LocalService.class.getSimpleName();
+        }
     }
-
 
     @Override
     public void onCreate() {
@@ -33,12 +33,12 @@ public class LocalService extends Service {
         conn = new MyConn();
     }
 
-    class MyBinder extends IMyAidlInterface.Stub {
-        @Override
-        public String getServiceName() throws RemoteException {
-            return LocalService.class.getSimpleName();
-        }
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return binder;
     }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -74,7 +74,7 @@ public class LocalService extends Service {
         //开启远程服务
         LocalService.this.startService(new Intent(LocalService.this, RomoteService.class));
 
-        unbindService(conn);
+//        unbindService(conn);
 
         //绑定远程服务
         LocalService.this.bindService(new Intent(LocalService.this, RomoteService.class), conn, Context.BIND_IMPORTANT);
