@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
@@ -19,10 +18,7 @@ public class RomoteService extends Service {
     MyBinder binder;
 
     class MyBinder extends IMyAidlInterface.Stub {
-        @Override
-        public String getServiceName() throws RemoteException {
-            return RomoteService.class.getSimpleName();
-        }
+
     }
 
     @Override

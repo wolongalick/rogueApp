@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
@@ -20,10 +19,7 @@ public class LocalService extends Service {
     MyConn conn;
 
     class MyBinder extends IMyAidlInterface.Stub {
-        @Override
-        public String getServiceName() throws RemoteException {
-            return LocalService.class.getSimpleName();
-        }
+
     }
 
     @Override
